@@ -37,7 +37,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           source: "client/dist/."
           target: "/var/www/hms/frontend/"
           strip_components: 2
@@ -47,7 +47,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           source: "server/src,server/server.js,server/package.json,server/package-lock.json"
           target: "/var/www/hms/server/"
           strip_components: 1
@@ -58,7 +58,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd /var/www/hms/server
             npm install --omit=dev --silent
@@ -66,6 +66,7 @@ jobs:
             pm2 save
             sleep 3
             pm2 status
-            curl -sf http://localhost:5000/api/health && echo "✅ Backend healthy!" || echo "⚠️ Check backend logs"
-            echo "🎉 HMS Deploy Complete!"
+            curl -sf http://localhost:5000/api/health && echo "✅ Backend healthy!" || echo "⚠️ Check backend"
+            echo "🎉 HMS Deployed!"
+
 
