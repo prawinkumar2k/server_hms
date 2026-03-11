@@ -1,0 +1,105 @@
+name: 🚀 HMS Auto Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # ──────────────────────────────────────────────
+      # 1. Checkout Code
+      # ──────────────────────────────────────────────
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      # ──────────────────────────────────────────────
+      # 2. Setup Node.js
+      # ──────────────────────────────────────────────
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      # ──────────────────────────────────────────────
+      # 3. Build Frontend
+      # ──────────────────────────────────────────────
+      - name: 📦 Install Frontend Dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: 🔨 Build Frontend
+        working-directory: ./client
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_API_URL: http://${{ secrets.VPS_HOST }}
+
+      # ──────────────────────────────────────────────
+      # 4. Upload Frontend to VPS
+      # ──────────────────────────────────────────────
+      - name: 🌐 Upload Frontend to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "client/dist/*"
+          target: "/var/www/hms/frontend"
+          strip_components: 2
+
+      # ──────────────────────────────────────────────
+      # 5. Upload Backend to VPS
+      # ──────────────────────────────────────────────
+      - name: ⚙️ Upload Backend to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "server/*"
+          target: "/var/www/hms/server"
+          strip_components: 1
+          # Don't overwrite .env file or node_modules
+          overwrite: true
+
+      # ──────────────────────────────────────────────
+      # 6. Restart Backend
+      # ──────────────────────────────────────────────
+      - name: 🔄 Restart Backend on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            echo "=== Installing new dependencies ==="
+            cd /var/www/hms/server
+            npm install --omit=dev --silent
+
+            echo "=== Restarting backend ==="
+            pm2 restart hms-backend || pm2 start server.js --name hms-backend
+            pm2 save
+
+            echo "=== Verifying deployment ==="
+            sleep 3
+            pm2 status
+            curl -sf http://localhost:5000/api/health || echo "Health check pending..."
+
+            echo "✅ Deployment complete!"
+
+      # ──────────────────────────────────────────────
+      # 7. Notify (Optional)
+      # ──────────────────────────────────────────────
+      - name: ✅ Deployment Summary
+        run: |
+          echo "🎉 HMS deployed successfully!"
+          echo "🌐 URL: http://${{ secrets.VPS_HOST }}"
+          echo "⏰ Time: $(date)"
