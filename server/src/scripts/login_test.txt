@@ -1,0 +1,11 @@
+
+=== LOGIN TEST ===
+Username: hr
+Password: password123
+
+User found: ID=12, Role=HR, Status=Active
+Stored hash (first 20 chars): $2b$10$dMHi9rHWfy4aH...
+Hash length: 60
+
+Password match: YES
+RESULT: SUCCESS - Login would succeed!

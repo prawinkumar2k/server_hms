@@ -1,0 +1,16 @@
+
+=== USERS IN DATABASE ===
+
+ID: 12 | User: hr              | Role: HR              | PwdLen: 60 | PwdStart: $2b$10$
+ID: 11 | User: pharma1234      | Role: PHARMA_MASTER   | PwdLen: 60 | PwdStart: $2b$10$
+ID: 10 | User: labmaster       | Role: LAB_MASTER      | PwdLen: 60 | PwdStart: $2b$10$
+ID: 9 | User: hariharan       | Role: Receptionist    | PwdLen: 60 | PwdStart: $2b$10$
+ID: 8 | User: mano@gmail.com  | Role: PHARMA_MASTER   | PwdLen: 60 | PwdStart: $2b$10$
+ID: 7 | User: manojanbu70@gmail.com | Role: Doctor          | PwdLen: 60 | PwdStart: $2b$10$
+ID: 6 | User: Pharma          | Role: Pharmacist      | PwdLen: 60 | PwdStart: $2b$10$
+ID: 5 | User: recep1          | Role: Receptionist    | PwdLen: 60 | PwdStart: $2b$10$
+ID: 4 | User: lab             | Role: Lab Technician  | PwdLen: 60 | PwdStart: $2b$10$
+ID: 3 | User: doc             | Role: Doctor          | PwdLen: 60 | PwdStart: $2b$10$
+ID: 1 | User: admin           | Role: Admin           | PwdLen: 60 | PwdStart: $2b$10$
+
+ All passwords appear to be properly hashed.

@@ -1,0 +1,316 @@
+{
+    "info": {
+        "name": "HMS Dashboard API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"doctor@hms.com\",\n    \"password\": \"doctor\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Test Auth",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/test",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "test"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Patients",
+            "item": [
+                {
+                    "name": "Get All Patients",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/patients",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "patients"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Register Patient",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test Patient\",\n    \"age\": \"30\",\n    \"gender\": \"Male\",\n    \"mobile\": \"9876543210\",\n    \"address\": \"123 Test St\",\n    \"bloodGroup\": \"O+\",\n    \"doctor\": \"Dr. Smith\",\n    \"opFee\": 200\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/patients",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "patients"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"status\": \"Consultation\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/patients/:id/status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "patients",
+                                ":id",
+                                "status"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Medical Records",
+            "item": [
+                {
+                    "name": "Create Record",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"patientId\": \"24\",\n    \"doctorId\": \"1\",\n    \"visitDate\": \"2023-10-27\",\n    \"symptoms\": \"Fever\",\n    \"diagnosis\": \"Viral\",\n    \"bp\": \"120/80\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/medical-records",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "medical-records"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Patient History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/medical-records/:patientId",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "medical-records",
+                                ":patientId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "patientId",
+                                    "value": "24"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Prescriptions",
+            "item": [
+                {
+                    "name": "Save Prescription",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"patientId\": \"24\",\n    \"patientName\": \"Jane Doe\",\n    \"age\": 28,\n    \"gender\": \"Female\",\n    \"date\": \"2023-10-27\",\n    \"medicines\": [\n        { \"name\": \"Paracetamol\", \"days\": 5 }\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/prescriptions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "prescriptions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Prescriptions",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/prescriptions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "prescriptions"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Inventory",
+            "item": [
+                {
+                    "name": "Get Products",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/inventory/products",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "inventory",
+                                "products"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Product",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"pCode\": \"P200\",\n    \"productName\": \"Syringe\",\n    \"amount\": 10,\n    \"stock\": 100\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/inventory/products",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "inventory",
+                                "products"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Lab Tests",
+            "item": [
+                {
+                    "name": "Get All Tests",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/api/tests",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "tests"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

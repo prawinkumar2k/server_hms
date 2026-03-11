@@ -1,0 +1,58 @@
+{
+    "Name": "HMS_PACS",
+    "StorageDirectory": "/var/lib/orthanc/db",
+    "IndexDirectory": "/var/lib/orthanc/db",
+    "StorageAccessOnFind": "Always",
+    "Plugins": [
+        "/usr/share/orthanc/plugins",
+        "/usr/local/share/orthanc/plugins"
+    ],
+    "ConcurrentJobs": 2,
+    "HttpServerEnabled": true,
+    "HttpPort": 8042,
+    "HttpDescribeErrors": true,
+    "HttpCompressionEnabled": true,
+    "DicomServerEnabled": true,
+    "DicomAet": "HMS_PACS",
+    "DicomCheckCalledAet": false,
+    "DicomPort": 4242,
+    "DefaultEncoding": "Utf8",
+    "DeflateTransferSyntaxAccepted": true,
+    "JpegTransferSyntaxAccepted": true,
+    "Jpeg2000TransferSyntaxAccepted": true,
+    "JpegLosslessTransferSyntaxAccepted": true,
+    "JpipTransferSyntaxAccepted": true,
+    "Mpeg2TransferSyntaxAccepted": true,
+    "RleTransferSyntaxAccepted": true,
+    "UnknownSopClassAccepted": false,
+    "DicomAlwaysAllowEcho": true,
+    "DicomAlwaysAllowStore": true,
+    "DicomAlwaysAllowFind": false,
+    "DicomAlwaysAllowGet": false,
+    "DicomAlwaysAllowMove": false,
+    "DicomCheckModalityHost": false,
+    "DicomModalities": {},
+    "DicomModalitiesInDatabase": false,
+    "DicomScuTimeout": 10,
+    "DicomScpTimeout": 15,
+    "LogExportedToPeers": false,
+    "RegisteredUsers": {
+        "admin": "orthanc_admin_password"
+    },
+    "AuthenticationEnabled": false,
+    "CorsRequestsEnabled": true,
+    "CorsAllowedOrigins": [
+        "*"
+    ],
+    "CorsAllowedHeaders": [
+        "*"
+    ],
+    "CorsAllowedMethods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS",
+        "HEAD"
+    ]
+}

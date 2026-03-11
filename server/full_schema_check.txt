@@ -1,0 +1,6 @@
+
+--- custransaction COLUMNS ---
+SNo, PDate, CName, Description, BillNo, Buy, Paid, Remark, CashType
+
+--- billdetails COLUMNS ---
+PDate, RNo, ProductName, BarCode, Pcode, Description, Price, CusName, Amount, Balance, Qty, Discount, GrandTotal, Tax, Vat, IGST, Status, CusID, GSTNO, MobileNo, Caddress, OrderNo, ODate, DispatchNo, DDate, DNote, TermsPay, SReference, OReference, Dispatch, Distination, TermsDelivery, QuoNo, DisPercentage, ReturnAmt, BillType, TestID

@@ -1,0 +1,53 @@
+{
+  "name": "hms-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@boldreports/react-reporting-components": "^12.2.6",
+    "ag-grid-community": "^35.0.0",
+    "ag-grid-react": "^35.0.0",
+    "axios": "^1.13.5",
+    "clsx": "^2.1.1",
+    "create-react-class": "^15.7.0",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^11.15.0",
+    "html2pdf.js": "^0.14.0",
+    "jquery": "^4.0.0",
+    "lucide-react": "^0.562.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-is": "^19.2.3",
+    "react-router-dom": "^7.11.0",
+    "react-to-print": "^3.2.0",
+    "recharts": "^3.6.0",
+    "save-dev": "^0.0.1-security",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "prettier": "3.7.4",
+    "prettier-plugin-tailwindcss": "0.7.2",
+    "tailwindcss": "^4.1.18",
+    "tailwindcss-print-styles": "^1.0.1",
+    "vite": "^7.2.4"
+  }
+}

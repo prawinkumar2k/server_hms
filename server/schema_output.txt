@@ -1,0 +1,13 @@
+id | int | PRI
+admission_id | int | MUL
+bed_number | varchar(20) | -
+ward | varchar(100) | -
+patient_name | varchar(255) | -
+diet_type | varchar(100) | -
+special_instructions | text | -
+meal_time | enum('Breakfast','Lunch','Snack','Dinner') | -
+scheduled_date | date | MUL
+status | enum('Pending','Preparing','Delivered','Cancelled') | -
+delivered_by | int | -
+delivered_at | datetime | -
+created_at | datetime | -
