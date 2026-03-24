@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Utensils, Search, Plus, Edit, Trash2, CheckCircle, XCircle } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
-
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import API from '../../config';
 
 const FoodMenu = () => {
     const { user } = useAuth();
