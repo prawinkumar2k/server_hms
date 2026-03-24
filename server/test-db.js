@@ -1,34 +1,24 @@
 const db = require('./src/config/db');
 
-async function testConnection() {
+async function test() {
+    console.log('--- Database Query Diagnostic ---');
     try {
-        console.log('Testing database connection...');
-
-        // Test basic connection
-        const [rows] = await db.execute('SELECT 1 as test');
-        console.log('✓ Database connection successful');
-
-        // Check if users table exists
-        const [tables] = await db.execute('SHOW TABLES');
-        console.log('✓ Available tables:', tables.map(t => Object.values(t)[0]));
-
-        // Check users table
-        const [users] = await db.execute('SELECT COUNT(*) as count FROM users');
-        console.log(`✓ Users table has ${users[0].count} records`);
-
-        // Check a sample user structure
-        const [sampleUser] = await db.execute('SELECT * FROM users LIMIT 1');
-        if (sampleUser.length > 0) {
-            console.log('✓ Sample user columns:', Object.keys(sampleUser[0]));
-        }
+        console.log('Executing: SELECT id, name FROM roles ORDER BY name ASC');
+        const [roles] = await db.execute('SELECT id, name FROM roles ORDER BY name ASC');
+        console.log('Success! Count:', roles.length);
+        
+        console.log('Executing: SELECT * FROM users LIMIT 1');
+        const [users] = await db.execute('SELECT * FROM users LIMIT 1');
+        console.log('Success! User found:', users[0]?.username);
 
         process.exit(0);
-    } catch (error) {
-        console.error('✗ Database error:', error.message);
-        console.error('Error code:', error.code);
-        console.error('Full error:', error);
+    } catch (err) {
+        console.error('❌ QUERY ERROR:');
+        console.error(`   Message: ${err.message}`);
+        console.error(`   Code: ${err.code}`);
+        console.error(`   Stack: ${err.stack}`);
         process.exit(1);
     }
 }
 
-testConnection();
+test();

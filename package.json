@@ -1,0 +1,16 @@
+{
+  "name": "hms-testing-hub",
+  "version": "1.0.0",
+  "scripts": {
+    "test:client": "cd client && npm test",
+    "test:server": "cd server && npm test",
+    "test:db": "node scripts/db-verify.js",
+    "test:e2e": "npx playwright test",
+    "test:report": "node scripts/test-all.js",
+    "test:all": "npm run test:client && npm run test:server && npm run test:e2e",
+    "generate:test": "node scripts/mini-cotester.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

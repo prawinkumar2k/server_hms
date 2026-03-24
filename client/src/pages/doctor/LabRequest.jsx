@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Plus, Trash2, CheckCircle2, User } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import PageTransition from '../../components/layout/PageTransition';
 import { usePatients } from '../../context/PatientContext';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 const LabRequest = () => {
     const { patients } = usePatients();
     const toast = useToast();
+    const { user } = useAuth();
 
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [selectedTests, setSelectedTests] = useState([]);
@@ -23,7 +25,10 @@ const LabRequest = () => {
     React.useEffect(() => {
         const fetchTests = async () => {
             try {
-                const res = await fetch('/api/lab/tests');
+                const token = localStorage.getItem('token');
+                const res = await fetch('/api/lab/tests', {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
                 if (res.ok) {
                     const data = await res.json();
                     // Map to a cleaner format if needed, but the service returns decent data
@@ -61,18 +66,22 @@ const LabRequest = () => {
         if (selectedTests.length === 0) return toast.warning("Please select at least one test.");
 
         try {
+            const token = localStorage.getItem('token');
             const payload = {
                 patientId: selectedPatient.id,
                 patientName: selectedPatient.name,
-                doctorId: 'DOC001', // TODO: Get from Auth
-                doctorName: 'Dr. Sarah Wilson',
+                doctorId: user?.id || 'DOC001',
+                doctorName: user?.full_name || user?.username || 'Dr. Sarah Wilson',
                 tests: selectedTests,
                 notes: 'Requested via Doctor Module'
             };
 
             const res = await fetch('/api/lab/request', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                },
                 body: JSON.stringify(payload)
             });
 

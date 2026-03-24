@@ -19,7 +19,7 @@ const toModel = (row) => ({
 
 exports.getAllPatients = async () => {
     // Fetching from copy_of_patientdetaiils as per existing schema
-    const [rows] = await db.execute('SELECT * FROM copy_of_patientdetaiils ORDER BY SNo DESC');
+    const [rows] = await db.execute('SELECT * FROM copy_of_patientdetaiils ORDER BY SNo DESC LIMIT 100');
     return rows.map(toModel);
 };
 

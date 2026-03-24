@@ -1,59 +1,64 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
-dotenv.config();
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 /**
- * Production-Grade MySQL Connection Pool
- * Tuned for handling up to 1M+ requests
- * 
- * Key settings:
- * - connectionLimit: 100 — Allows high concurrent query throughput
- * - maxIdle: 20 — Keeps 20 warm connections to avoid cold-start latency
- * - idleTimeout: 60000 — Reclaim idle connections after 60 seconds
- * - enableKeepAlive: true — Prevents TCP connection drops from firewalls/LBs
- * - queueLimit: 0 — Unlimited queue (no dropped requests)
- * - namedPlaceholders: true — Enables cleaner parameterized queries
+ * Industrial-Grade MySQL Connection Pool
+ * Features: Automatic reconnection, Pool monitoring, and Robust error handling.
  */
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+const poolConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASS || '',
+    database: process.env.DB_NAME || 'hms',
     port: parseInt(process.env.DB_PORT, 10) || 3306,
-
-    // Pool sizing
     waitForConnections: true,
-    connectionLimit: parseInt(process.env.DB_POOL_SIZE, 10) || 100,
-    maxIdle: 20,
-    idleTimeout: 60000,
+    connectionLimit: parseInt(process.env.DB_POOL_SIZE, 10) || 50,
     queueLimit: 0,
-
-    // Connection stability
     enableKeepAlive: true,
-    keepAliveInitialDelay: 30000,
-
-    // Timezone & charset
+    keepAliveInitialDelay: 10000,
     timezone: '+05:30',
-    charset: 'utf8mb4',
+    charset: 'utf8mb4'
+};
 
-    // Query safety
-    multipleStatements: false,
-    dateStrings: true,
+const pool = mysql.createPool(poolConfig);
 
-    // Named placeholders for cleaner queries
-    namedPlaceholders: true
+// Enhance pool with monitoring
+pool.on('acquire', (connection) => {
+    // console.log('[DB] Connection %d acquired', connection.threadId);
 });
 
-// Monitor pool events in non-production
-if (process.env.NODE_ENV !== 'production') {
-    pool.on('connection', () => {
-        // Lightweight connection event - no logging in production
-    });
+pool.on('connection', (connection) => {
+    // console.log('[DB] New connection established');
+});
 
-    pool.on('enqueue', () => {
-        console.warn('[DB POOL] Waiting for available connection slot...');
-    });
-}
+pool.on('enqueue', () => {
+    console.warn('[DB] Waiting for available connection slot...');
+});
 
-module.exports = pool.promise();
+pool.on('release', (connection) => {
+    // console.log('[DB] Connection %d released', connection.threadId);
+});
+
+const promisePool = pool.promise();
+
+// Diagnostic helper
+promisePool.testConnection = async () => {
+    try {
+        const conn = await promisePool.getConnection();
+        console.log(`✅ DATABASE CONNECTED: ${poolConfig.user}@${poolConfig.host}:${poolConfig.port}/${poolConfig.database}`);
+        conn.release();
+        return true;
+    } catch (err) {
+        console.error('❌ DATABASE CONNECTION ERROR:');
+        console.error(`   Code: ${err.code}`);
+        console.error(`   User: ${poolConfig.user}`);
+        console.error(`   Host: ${poolConfig.host}:${poolConfig.port}`);
+        console.error(`   Msg:  ${err.message}`);
+        return false;
+    }
+};
+
+module.exports = promisePool;

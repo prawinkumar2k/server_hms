@@ -1,15 +1,15 @@
 // Full End-to-End System Verification Script
 // Native Node.js - No external dependencies (uses built-in fetch in Node 18+)
 
-const BASE_URL = 'http://localhost:3000'; // Direct to backend
+const BASE_URL = 'http://127.0.0.1:5000'; // Direct to backend
 const VERBOSE = true;
 
 const users = [
     { username: 'admin', password: 'admin123', role: 'Admin' },
-    { username: 'doc1', password: 'password123', role: 'Doctor' },
-    { username: 'recep1', password: 'password123', role: 'Receptionist' },
-    { username: 'lab1', password: 'password123', role: 'Lab Technician' },
-    { username: 'pharma1', password: 'password123', role: 'Pharmacist' }
+    { username: 'doc', password: 'doctor123', role: 'Doctor' },
+    { username: 'recep1', password: 'reception123', role: 'Receptionist' },
+    { username: 'lab', password: 'lab123', role: 'Lab Technician' },
+    { username: 'Pharma', password: 'pharma123', role: 'Pharmacist' }
 ];
 
 const results = [];
@@ -79,7 +79,7 @@ async function runVerification() {
     console.log('--- 1. Authentication Check ---');
     const sessions = {};
     for (const user of users) {
-        process.stdout.write(`   Logging in as ${user.role} (${user.username})... `);
+        console.log(`   Logging in as ${user.role} (${user.username})...`);
         const auth = await login(user);
         if (auth.success) {
             console.log('✅ OK');

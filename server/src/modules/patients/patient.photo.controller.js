@@ -92,6 +92,9 @@ exports.getPatientPhoto = async (req, res, next) => {
 
         const photoFilename = rows[0].photo;
         if (!photoFilename) {
+            if (req.method === 'HEAD') {
+                return res.status(200).set('X-Photo-Exists', 'false').end();
+            }
             return next(new AppError('No photo found for this patient', 404));
         }
 
@@ -103,7 +106,14 @@ exports.getPatientPhoto = async (req, res, next) => {
         }
 
         if (!(await fs.pathExists(filepath))) {
+            if (req.method === 'HEAD') {
+                return res.status(200).set('X-Photo-Exists', 'false').end();
+            }
             return next(new AppError('Photo file missing on server', 404));
+        }
+
+        if (req.method === 'HEAD') {
+            return res.status(200).set('X-Photo-Exists', 'true').end();
         }
 
         res.sendFile(filepath);

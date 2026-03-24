@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     User, Phone, Calendar, Clock, MapPin,
     Stethoscope, CreditCard, Save, RotateCcw,
@@ -10,6 +10,57 @@ import PageTransition from '../../components/layout/PageTransition';
 
 import { usePatients } from '../../context/PatientContext';
 import { useAuth } from '../../context/AuthContext';
+
+
+const PatientAvatar = ({ patient }) => {
+    const [status, setStatus] = useState('checking'); // checking, ok, error
+    const photoUrl = patient.photo
+        ? `/api/patients/${patient.id}/photo?t=${patient.photo}&token=${localStorage.getItem('token')}`
+        : null;
+
+    useEffect(() => {
+        if (!photoUrl) {
+            setStatus('error');
+            return;
+        }
+
+        // Use fetch to check existence silently without browser 404 logging on <img> tag
+        const checkImage = async () => {
+            try {
+                const response = await fetch(photoUrl, { method: 'HEAD', cache: 'no-cache' });
+                if (response.ok && response.headers.get('X-Photo-Exists') !== 'false') {
+                    setStatus('ok');
+                } else {
+                    setStatus('error');
+                }
+            } catch (e) {
+                setStatus('error');
+            }
+        };
+
+        checkImage();
+    }, [photoUrl]);
+
+    if (status === 'checking') {
+        return <div className="w-8 h-8 rounded-full bg-slate-50 animate-pulse border border-slate-100" />;
+    }
+
+    if (status === 'error' || !photoUrl) {
+        return (
+            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                <User className="w-4 h-4 text-slate-400" />
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={photoUrl}
+            alt={patient.name}
+            className="w-8 h-8 rounded-full object-cover border border-slate-200"
+        />
+    );
+};
 
 const Reception = () => {
     // Current Date/Time for Token
@@ -469,18 +520,7 @@ const Reception = () => {
                                         <td className="px-4 py-3 font-medium text-green-600">₹ {patient.opFee}</td>
                                         <td className="px-4 py-3 text-slate-500 text-xs">{patient.tokenDate}</td>
                                         <td className="px-4 py-3">
-                                            {patient.photo ? (
-                                                <img
-                                                    src={`/api/patients/${patient.id}/photo?t=${patient.photo}&token=${localStorage.getItem('token')}`}
-                                                    alt={patient.name}
-                                                    className="w-8 h-8 rounded-full object-cover border border-slate-200"
-                                                    onError={(e) => { e.target.style.display = 'none'; }}
-                                                />
-                                            ) : (
-                                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                                    <User className="w-4 h-4 text-slate-400" />
-                                                </div>
-                                            )}
+                                            <PatientAvatar patient={patient} />
                                         </td>
                                         <td className="px-4 py-3 text-right">
                                             {!isAdmin ? (

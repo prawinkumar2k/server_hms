@@ -38,13 +38,23 @@ const ensureTablesExist = async () => {
     try {
         await db.execute(createBillingTable);
         await db.execute(createBillItemsTable);
-        console.log("Verified lab billing tables exist.");
+        // console.log("Verified lab billing tables exist.");
     } catch (error) {
-        console.error("Error ensuring lab tables:", error);
+        console.error("Error ensuring lab tables:", error.message);
     }
 };
 
-ensureTablesExist();
+exports.ensureTablesExist = ensureTablesExist;
+
+// Managed initialization - only runs in real app, not in tests
+if (process.env.NODE_ENV !== 'test' && !process.env.npm_lifecycle_event?.includes('test')) {
+    ensureTablesExist().catch(e => {
+        // Only log serious failures if we are sure we are not testing
+        if (process.env.NODE_ENV !== 'test') {
+             console.error("Auto-initialization of lab tables failed (DB offline?)");
+        }
+    });
+}
 
 // --- Doctors (Mapped to doctordetails) ---
 exports.getAllDoctors = async () => {

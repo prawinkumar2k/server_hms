@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "load-test": "node tests/load/run_load_test.js",
     "sanity-check": "node tests/sanity/sanity_check.js",
     "e2e-verify": "node tests/e2e/full_system_verify.js",
+    "test:db": "node ../scripts/db-verify.js",
+    "test:report": "node ../scripts/test-all.js",
     "fix-schema": "node src/scripts/fix_schema.js",
     "create-indexes": "node src/scripts/create_indexes.js",
     "start": "nodemon server.js",
@@ -38,6 +42,9 @@
   },
   "devDependencies": {
     "autocannon": "^8.0.0",
-    "nodemon": "^3.1.11"
+    "cross-env": "^10.1.0",
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
   }
 }

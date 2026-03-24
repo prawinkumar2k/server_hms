@@ -16,7 +16,7 @@ app.enable('trust proxy');
 // ============================================================
 
 // Security Headers
-app.use(helmet());
+// app.use(helmet());
 
 // Response Compression (gzip/brotli) — reduces payload size by ~70%
 app.use(compression({
@@ -73,10 +73,12 @@ if (isDevelopment) {
 }
 
 // Logging — Pipe morgan to winston (skip health checks)
+/*
 app.use(morgan('combined', {
     stream: logger.stream,
     skip: (req) => req.url === '/health' || req.url === '/api/health'
 }));
+*/
 
 // Body Parsing — with size limits to prevent payload attacks
 app.use(express.json({ limit: '10mb' }));

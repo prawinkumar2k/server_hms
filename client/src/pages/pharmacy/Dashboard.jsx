@@ -39,6 +39,12 @@ const PharmacyDashboard = () => {
     const [txnFilter, setTxnFilter] = useState('All');
     const [dateRangeOpen, setDateRangeOpen] = useState(false);
     const [selectedDateRange, setSelectedDateRange] = useState('Today');
+    const [isChartReady, setIsChartReady] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsChartReady(true), 500);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         fetchStats();
@@ -113,36 +119,43 @@ const PharmacyDashboard = () => {
     };
 
     // --- Components ---
-    const StatCard = ({ title, value, change, changeType, color, isCurrency = false }) => (
-        <Card className="hover:shadow-md transition-shadow border-none shadow-sm h-full">
-            <CardContent className="p-6">
-                <div className="flex justify-between items-start">
-                    <div className="flex flex-col justify-between h-full min-h-[100px]">
-                        <div>
-                            <p className="text-slate-500 text-sm font-medium mb-1">{title}</p>
-                            <h3 className="text-2xl font-bold text-slate-800 tracking-tight">
-                                {isCurrency ? formatCurrency(value) : value}
-                            </h3>
+    const StatCard = ({ title, value, change, changeType, color, isCurrency = false }) => {
+        const [mounted, setMounted] = useState(false);
+        useEffect(() => setMounted(true), []);
+
+        return (
+            <Card className="hover:shadow-md transition-shadow border-none shadow-sm h-full">
+                <CardContent className="p-6">
+                    <div className="flex justify-between items-start">
+                        <div className="flex flex-col justify-between h-full min-h-[100px]">
+                            <div>
+                                <p className="text-slate-500 text-sm font-medium mb-1">{title}</p>
+                                <h3 className="text-2xl font-bold text-slate-800 tracking-tight">
+                                    {isCurrency ? formatCurrency(value) : value}
+                                </h3>
+                            </div>
+                            <div className="flex items-center mt-2 text-xs font-medium">
+                                <span className={`flex items-center ${changeType === 'down' ? 'text-rose-500' : 'text-emerald-500'}`}>
+                                    {changeType === 'down' ? <TrendingDown className="w-3 h-3 mr-1" /> : <TrendingUp className="w-3 h-3 mr-1" />}
+                                    {change || '0%'}
+                                </span>
+                                <span className="text-slate-400 ml-1">vs. last week</span>
+                            </div>
                         </div>
-                        <div className="flex items-center mt-2 text-xs font-medium">
-                            <span className={`flex items-center ${changeType === 'down' ? 'text-rose-500' : 'text-emerald-500'}`}>
-                                {changeType === 'down' ? <TrendingDown className="w-3 h-3 mr-1" /> : <TrendingUp className="w-3 h-3 mr-1" />}
-                                {change || '0%'}
-                            </span>
-                            <span className="text-slate-400 ml-1">vs. last week</span>
+                        <div className="h-16 w-28">
+                            {mounted && (
+                                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={300} aspect={1.75}>
+                                    <LineChart data={sparklineData}>
+                                        <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2.5} dot={false} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            )}
                         </div>
                     </div>
-                    <div className="h-16 w-28">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={sparklineData}>
-                                <Line type="monotone" dataKey="value" stroke={color} strokeWidth={2.5} dot={false} />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
-    );
+                </CardContent>
+            </Card>
+        );
+    };
 
     if (loading) return <div className="p-8 text-center text-slate-500">Loading Dashboard...</div>;
 
@@ -318,11 +331,13 @@ const PharmacyDashboard = () => {
 
                                 {/* Area Chart */}
                                 <div className="absolute -bottom-4 -left-4 -right-4 h-32 opacity-20 pointer-events-none group-hover:opacity-30 transition-opacity">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <AreaChart data={stats.chartData.length > 0 ? stats.chartData : [{ value: 0 }, { value: 0 }]}>
-                                            <Area type="monotone" dataKey="value" stroke="#fff" fill="#fff" fillOpacity={0.6} />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
+                                    {isChartReady && (
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={300} aspect={3}>
+                                            <AreaChart data={stats.chartData.length > 0 ? stats.chartData : [{ value: 0 }, { value: 0 }]}>
+                                                <Area type="monotone" dataKey="value" stroke="#fff" fill="#fff" fillOpacity={0.6} />
+                                            </AreaChart>
+                                        </ResponsiveContainer>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
@@ -336,8 +351,8 @@ const PharmacyDashboard = () => {
                             </CardHeader>
                             <CardContent>
                                 <div className="h-[250px] w-full mt-4">
-                                    {stats.chartData.length > 0 ? (
-                                        <ResponsiveContainer width="100%" height="100%">
+                                    {isChartReady && stats.chartData.length > 0 ? (
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={300} aspect={2}>
                                             <LineChart data={stats.chartData}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} dy={10}
@@ -356,9 +371,9 @@ const PharmacyDashboard = () => {
                                                 <Line type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={3} dot={{ r: 4, fill: '#6366f1', strokeWidth: 0 }} activeDot={{ r: 6 }} />
                                             </LineChart>
                                         </ResponsiveContainer>
-                                    ) : (
+                                    ) : stats.chartData.length === 0 && isChartReady ? (
                                         <div className="flex items-center justify-center h-full text-slate-400 text-sm">No sales data in last 7 days</div>
-                                    )}
+                                    ) : null}
                                 </div>
                             </CardContent>
                         </Card>

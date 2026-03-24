@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+const logger = require('../utils/logger');
+
 const verifyToken = (req, res, next) => {
     let token;
     const authHeader = req.headers['authorization'];
@@ -28,6 +30,7 @@ const authorizeRoles = (...allowedRoles) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         if (!allowedRoles.includes(req.user.role)) {
+            logger.info(`[RBAC] Access Denied for ${req.user.username}. Required: [${allowedRoles.join(', ')}], Current: "${req.user.role}"`);
             return res.status(403).json({
                 message: `Access denied. Required: [${allowedRoles.join(', ')}], Current: ${req.user.role}`
             });

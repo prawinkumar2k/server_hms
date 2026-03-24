@@ -16,13 +16,19 @@ const LabResults = () => {
         const fetchResults = async () => {
             try {
                 // In a real scenario, we might have a specific endpoint for results
-                // For now, reusing pending requests but filtering for COMPLETED in frontend or backend
-                const res = await fetch('/api/lab/requests/pending?status=COMPLETED');
+                const token = localStorage.getItem('token');
+                const res = await fetch('/api/lab/requests/pending?status=COMPLETED', {
+                    headers: token ? {
+                        'Authorization': `Bearer ${token}`
+                    } : {}
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setResults(data);
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error('Fetch Results Error:', e);
+            }
         };
         fetchResults();
     }, []);

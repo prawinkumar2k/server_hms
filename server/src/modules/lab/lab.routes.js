@@ -23,7 +23,7 @@ router.get('/billing', cacheResponse(30), labController.getBills);
 
 // Requests - RBAC Enforced
 router.post('/request', protect, authorizeRoles('Doctor', 'Receptionist', 'Admin'), labController.createLabRequest);
-router.get('/requests/pending', protect, authorizeRoles('Lab Technician', 'LAB_MASTER', 'Admin'), labController.getPendingRequests);
+router.get('/requests/pending', protect, authorizeRoles('Doctor', 'Lab Technician', 'LAB_MASTER', 'Admin'), labController.getPendingRequests);
 router.put('/request/:id/status', protect, authorizeRoles('Lab Technician', 'LAB_MASTER', 'Admin'), labController.updateRequestStatus);
 
 // Test Entry - Execution requires approval check (handled in controller) but role must be Technician or Master

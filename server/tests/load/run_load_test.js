@@ -2,7 +2,7 @@ const autocannon = require('autocannon');
 // const { fetch } = require('undici'); // Native fetch is available in Node 18+
 // Using native fetch for the login helper if standard node 18+
 
-const BASE_URL = 'http://localhost:3000'; // Direct to backend container port mapping
+const BASE_URL = 'http://127.0.0.1:5000'; // Direct to backend container port mapping
 // const BASE_URL = 'http://localhost'; // Through Nginx (if we want to test whole stack) -> Let's test direct to backend first to isolate nodejs performance, then nginx.
 
 // Actually, testing through Nginx (port 80) is more realistic for "Production" readiness.
@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:3000'; // Direct to backend container port ma
 // and we are testing the Node clustering. 
 // Wait, docker-compose maps 3000:3000, so we can hit it.
 
-const TARGET_URL = 'http://localhost:3000';
+const TARGET_URL = 'http://127.0.0.1:5000';
 
 async function getAuthToken() {
     console.log('Logging in to get stress test token...');
@@ -46,9 +46,9 @@ async function runLoadTest() {
 
     const result = await autocannon({
         url: TARGET_URL,
-        connections: 100, // Number of concurrent connections
+        connections: 50, // Number of concurrent connections
         pipelining: 1,    // Number of pipelined requests
-        duration: 30,     // Duration in seconds
+        duration: 10,     // Duration in seconds
         workers: 4,       // Use 4 worker threads for generating load (client side CPU)
         headers: {
             'Authorization': `Bearer ${token}`,

@@ -1,7 +1,14 @@
 const AppError = require('../utils/AppError');
 const logger = require('../utils/logger');
 
-const sendErrorDev = (err, res) => {
+const sendErrorDev = (err, req, res) => {
+    // Log the error for server-side debugging
+    logger.error(`[DEV ERROR] ${req.method} ${req.originalUrl}`, {
+        message: err.message,
+        stack: err.stack,
+        error: err
+    });
+
     res.status(err.statusCode).json({
         status: err.status,
         error: err,
@@ -35,13 +42,13 @@ module.exports = (err, req, res, next) => {
     err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'development') {
-        sendErrorDev(err, res);
+        sendErrorDev(err, req, res);
     } else if (process.env.NODE_ENV === 'production') {
         let error = { ...err };
         error.message = err.message;
         sendErrorProd(error, res);
     } else {
         // Fallback for other environments or if NODE_ENV is not set
-        sendErrorDev(err, res);
+        sendErrorDev(err, req, res);
     }
 };

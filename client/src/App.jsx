@@ -13,6 +13,7 @@ import RoleSelection from './pages/public/RoleSelection';
 import Landing from './pages/public/Landing';
 import Monitoring from './pages/admin/Monitoring';
 import ActivityLogs from './pages/admin/ActivityLogs';
+import TestDashboard from './pages/admin/TestDashboard';
 import UserList from './pages/dashboard/admin/users/UserList';
 import CreateNewUser from './pages/dashboard/admin/users/CreateNewUser';
 import EditUser from './pages/dashboard/admin/users/EditUser';
@@ -151,6 +152,11 @@ const AppRoutes = () => {
         <Route path="admin/monitoring" element={
           <ProtectedRoute allowedRoles={['Admin']}>
             <Monitoring />
+          </ProtectedRoute>
+        } />
+        <Route path="admin/testing" element={
+          <ProtectedRoute allowedRoles={['Admin']}>
+            <TestDashboard />
           </ProtectedRoute>
         } />
         <Route path="admin/logs" element={

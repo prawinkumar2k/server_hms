@@ -17,15 +17,22 @@ CREATE TABLE IF NOT EXISTS daily_op_records (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )`;
 
-// Initialize table
-(async () => {
+// Initialize table helper
+exports.initializeTable = async () => {
     try {
         await db.execute(createTableQuery);
-        console.log("Daily OP Records table initialized.");
+        // console.log("Daily OP Records table initialized.");
     } catch (err) {
-        console.error("Error initializing Daily OP Records table:", err);
+        console.error("Error initializing Daily OP Records table:", err.message);
     }
-})();
+};
+
+// Auto-init only if NOT in test mode to avoid Jest leaks
+if (process.env.NODE_ENV !== 'test' && !process.env.npm_lifecycle_event?.includes('test')) {
+    exports.initializeTable().catch(e => {
+         if (process.env.NODE_ENV !== 'test') console.error("Auto-initialization of daily-op tables failed.");
+    });
+}
 
 exports.addRecord = async (data) => {
     const { patient_name, age_gender, contact, visit_type, op_fees, total_fees, payment_status, visit_date, source_type, source_id } = data;

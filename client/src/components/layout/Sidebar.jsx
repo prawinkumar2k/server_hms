@@ -8,7 +8,7 @@ import {
     Stethoscope, Pill, ClipboardList, Activity,
     History, BarChart3, ChevronDown, CreditCard, Shield, BadgeDollarSign,
     Calendar, CheckCircle, BedDouble, UserPlus, Receipt, Truck, RefreshCw, Clock, Mail, Package,
-    Heart, Utensils, Syringe
+    Heart, Utensils, Syringe, Cpu
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
@@ -411,6 +411,7 @@ const Sidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
             label: "System Control",
             items: [
                 { title: "Users & Roles", icon: Shield, path: "/admin/users/list", roles: ['Admin'], module: 'users' },
+                { title: "AI Testing Center", icon: Cpu, path: "/admin/testing", roles: ['Admin'], module: 'logs' },
                 { title: "System Monitoring", icon: Activity, path: "/admin/monitoring", roles: ['Admin'], module: 'logs' },
                 { title: "Audit Logs", icon: FileText, path: "/admin/logs", roles: ['Admin'], module: 'logs' }
             ]

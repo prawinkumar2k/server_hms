@@ -20,6 +20,8 @@ exports.login = async (req, res) => {
         }
 
         console.log(`[LOGIN] Attempting login for username: ${username}`);
+        console.log(`[LOGIN] TEST_DEBUG: Password length: ${password ? password.length : 0}`);
+        if (password && password.includes(' ')) console.log('[LOGIN] WARNING: Password contains spaces');
 
         // 2. VERIFY JWT_SECRET EXISTS
         if (!process.env.JWT_SECRET) {
