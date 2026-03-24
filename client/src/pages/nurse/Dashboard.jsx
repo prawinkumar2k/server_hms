@@ -6,8 +6,7 @@ import {
     ChevronRight, RefreshCw, Package
 } from 'lucide-react';
 import axios from 'axios';
-
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import API from '../../config';
 
 const NurseDashboard = () => {
     const [data, setData] = useState({ activePatients: [], pendingIndents: 0, totalActive: 0 });

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Pill, FlaskConical, Utensils, Syringe, Stethoscope, XCircle, Clock, RefreshCw } from 'lucide-react';
 import axios from 'axios';
-
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import API from '../../config';
 
 const DoctorOrders = () => {
     const { admissionId } = useParams();

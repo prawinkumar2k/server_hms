@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Package, Clock, CheckCircle, XCircle, Truck, RefreshCw } from 'lucide-react';
 import axios from 'axios';
-
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import API from '../../config';
 
 const WardIndent = () => {
     const navigate = useNavigate();

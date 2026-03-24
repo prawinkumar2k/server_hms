@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Utensils, CheckCircle, Clock, ChefHat, RefreshCw, Filter, Truck, Eye } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
-
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import API from '../../config';
 
 const PantryDashboard = () => {
     const { user } = useAuth();
