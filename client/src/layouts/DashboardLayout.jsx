@@ -8,7 +8,7 @@ const Layout = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
-        <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+        <div className="flex h-screen overflow-hidden bg-slate-50 font-sans text-slate-900">
             {/* Sidebar */}
             <Sidebar
                 collapsed={collapsed}
