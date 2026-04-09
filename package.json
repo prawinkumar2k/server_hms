@@ -1,6 +1,7 @@
 {
   "name": "hms-testing-hub",
   "version": "1.0.0",
+  "description": "Enterprise Hospital Management System (HMS) - A unified platform for clinical, administrative, and financial management.",
   "scripts": {
     "test:client": "cd client && npm test",
     "test:server": "cd server && npm test",

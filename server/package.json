@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Enterprise HMS Backend - High-performance Node.js API with Express 5, supporting multi-site clinic operations.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
