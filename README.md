@@ -28,7 +28,7 @@
 
 > **Demo walkthrough recorded below:**
 
-https://github.com/user-attachments/assets/lifeline-hms-demo
+![Demo Walkthrough](./assets/demo_walkthrough.webp)
 
 > *The landing page showcases real-time KPIs: OPD Flow (142), Active Admissions (28), Active Doctors (18), and Revenue Today (₹2.4L).*
 
@@ -56,11 +56,15 @@ The public landing page is a fully polished SaaS marketing page showcasing:
 - Highlighted portal access for 6 departments: Admin, Doctor, Reception, Pharmacy, Lab, and HR
 - Navigation to Login and full-feature highlights
 
+![Landing Page](./assets/landing_page.png)
+
 ### Login & Role-Based Access
 The login interface dynamically loads available roles from the backend. Users authenticate with:
 - Staff Username / ID
 - Password
 - Role selection (enforced via dropdown)
+
+![Login Page](./assets/login_page.png)
 
 Upon login, users are redirected to their **role-specific dashboard** — a doctor sees their consultation queue; a receptionist sees the patient registration module; a pharmacist sees the dispensary station.
 
